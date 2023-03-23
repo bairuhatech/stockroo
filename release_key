@@ -1,0 +1,72 @@
+
+CMD: keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+-------------------------------------------------------------
+Enter keystore password:stock@2020
+What is your first and last name?
+  [Unknown]:  stockroo
+What is the name of your organizational unit?
+  [Unknown]:  bairuha
+What is the name of your organization?
+  [Unknown]:  bairuha
+What is the name of your City or Locality?
+  [Unknown]:  calicut
+What is the name of your State or Province?
+  [Unknown]:  kerala 
+What is the two-letter country code for this unit?
+  [Unknown]:  IN
+Is CN=stockroo, OU=bairuha, O=bairuha, L=calicut, ST=kerala, C=IN correct?
+  [no]:  YES
+
+--------------------------------------------------------------
+Debug 
+--------------------------------------------------------------
+CMD: keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass androiddebugkey
+
+debugkey -storepass android -keypass androiddebugkey
+Alias name: androiddebugkey
+Creation date: 2 Jan, 2020
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: C=US, O=Android, CN=Android Debug
+Issuer: C=US, O=Android, CN=Android Debug
+Serial number: 1
+Valid from: Thu Jan 02 21:45:38 IST 2020 until: Sat Dec 25 21:45:38 IST 2049
+Certificate fingerprints:
+         MD5:  15:D8:E6:EE:CF:D0:92:4A:38:3E:13:C5:8C:8B:D5:D4
+         SHA1: 9F:11:DD:63:51:4C:2D:BB:24:E1:AF:8C:B7:D6:12:65:3B:4B:CD:B1
+         SHA256: 91:02:E8:B7:DA:9E:4E:49:A4:A1:C5:62:69:45:FD:9E:BD:80:6F:80:AA:D2:90:DF:77:7F:54:A7:FD:20:0F:19
+Signature algorithm name: SHA1withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 1
+
+--------------------------------------------------------------
+Relase
+--------------------------------------------------------------
+CMD: keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias
+
+Alias name: my-key-alias
+Creation date: 15-Jul-2022
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=sahari, OU=sahari, O=sahari, L=calicut, ST=kerala, C=IN
+Issuer: CN=sahari, OU=sahari, O=sahari, L=calicut, ST=kerala, C=IN
+Serial number: 3f8f920a
+Valid from: Fri Jul 15 13:42:06 IST 2022 until: Tue Nov 30 13:42:06 IST 2049
+Certificate fingerprints:
+	 SHA1: 6F:F9:0D:B1:E6:B5:6B:88:40:40:01:7A:A8:A4:E6:03:19:27:3D:BF
+	 SHA256: 5E:E8:E9:C1:FB:BB:08:BD:F4:9D:5E:48:71:4D:3B:4E:60:5D:CB:18:98:AC:0A:41:4E:45:72:2B:A8:F4:E5:95
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions: 
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 3C 47 61 7D BB 86 03 FB   1A 30 B4 D1 C7 88 BA ED  <Ga......0......
+0010: 61 0D 71 CF                                        a.q.
+]
+]
