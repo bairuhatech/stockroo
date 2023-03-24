@@ -10,16 +10,37 @@ import {
 import COLOR from '../../Config/color';
 import Fonts from '../../Config/fonts';
 import Share from 'react-native-share';
+import RNFetchBlob from 'rn-fetch-blob';
+
 const ExportModal = (props: any) => {
   const share = () => {
-    Share.open({
-      title: 'Scan Report',
-      message: 'Your scan report',
-      url: `file:///${props.path}`,
-      subject: 'Scan Report',
-    });
-    props.close();
+    try {
+      Share.open({
+        title: 'Scan Report',
+        message: 'Your scan report',
+        url: `file:///${props.path}`,
+        subject: 'Scan Report',
+      });
+    } catch (err) {
+      console.log('err', err);
+    }
   };
+
+  const openFile = () => {
+    try {
+      RNFetchBlob.android
+        .actionViewIntent(props.path, 'application/vnd.ms-excel')
+        .then(() => {
+          console.log('success');
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+    } catch (err) {
+      console.log('err', err);
+    }
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -36,18 +57,26 @@ const ExportModal = (props: any) => {
                 style={{width: 100, height: 100, alignSelf: 'center'}}
               />
               <Text style={styles.pathlink}>{props.path}</Text>
-              <TouchableOpacity
-                style={styles.sharebutton}
-                onPress={() => share()}>
-                <Text style={styles.sharebuttonTXT}>Share File</Text>
-              </TouchableOpacity>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  style={styles.sharebutton}
+                  onPress={() => share()}>
+                  <Text style={styles.sharebuttonTXT}>Share</Text>
+                </TouchableOpacity>
+                <View style={{margin: 10}} />
+                <TouchableOpacity
+                  style={styles.sharebutton}
+                  onPress={() => openFile()}>
+                  <Text style={styles.sharebuttonTXT}>Open</Text>
+                </TouchableOpacity>
+              </View>
             </>
           ) : (
             <>
               <Text style={styles.heading}>Plese wait perparing excel</Text>
               <ImageBackground
                 source={require('../../Assets/images/excel.gif')}
-                style={{width: 100, height: 100, alignSelf: 'center'}}
+                style={{width: 150, height: 150, alignSelf: 'center'}}
               />
             </>
           )}
@@ -86,8 +115,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   heading: {
-    fontFamily: Fonts.SemiBold,
-    fontSize: 14,
+    fontFamily: Fonts.Bold,
+    fontSize: 18,
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -97,6 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
+    flex: 1,
   },
   sharebuttonTXT: {
     fontFamily: Fonts.SemiBold,
@@ -107,11 +137,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: Fonts.SemiBold,
     color: 'red',
+    margin: 20,
   },
   pathlink: {
     fontFamily: Fonts.Medium,
     margin: 10,
     textAlign: 'center',
     fontSize: 10,
+    marginBottom: 20,
   },
 });

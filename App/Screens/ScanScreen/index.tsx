@@ -13,6 +13,13 @@ var RNFS = require('react-native-fs');
 import XLSX from 'xlsx';
 import ExportModal from './ExportModal';
 
+import {
+  addNewItem,
+  IncrimentItem,
+  DecrimentItem,
+  RemoveItem,
+} from './Operation/ArrayFunction';
+
 const ScanScreen = (props: any) => {
   const dispatch = useDispatch();
   const ScanItems = useSelector((state: any) => state.Scan.items);
@@ -30,36 +37,19 @@ const ScanScreen = (props: any) => {
     }
   }, []);
 
-  const addItem = (code: any) => {
+  const addItem = async (code: any) => {
     if (code && code) {
-      seloading(true);
-      var arr: any = items;
-      var checkItem = arr.findIndex((i: any) => i.qrcode === code);
-      if (checkItem >= 0) {
-        let Itemo = arr[checkItem];
-        Itemo.quantity = Number(Itemo.quantity) + 1;
-        arr[checkItem] = Itemo;
-        sitems(arr);
-        Onchange(arr);
-      } else {
-        let newObj = [
-          {
-            qrcode: code,
-            quantity: 1,
-            date: moment().format(),
-          },
-        ];
-        let newarr: any = [...arr, ...newObj];
-        sitems(newarr);
-        Onchange(newarr);
-      }
+      let newarr: any = await addNewItem(items, code);
+      sitems(newarr);
+      Onchange(newarr);
     } else {
       console.log('no qrcode', code);
     }
   };
 
-  const Incriment = (item: any) => {
+  const Incriment = async (item: any) => {
     seloading(true);
+    let newarr: any = await IncrimentItem(items, item);
     var arr: any = items;
     var checkItem = arr.findIndex((i: any) => i.qrcode === item.qrcode);
     if (checkItem >= 0) {

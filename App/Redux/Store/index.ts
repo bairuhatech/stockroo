@@ -15,7 +15,7 @@ import Slices from '../Slices';
 const persistConfig = {
   key: 'redux',
   storage: AsyncStorage,
-  whitelist: ['Auth'],
+  whitelist: ['Auth', 'Scan'],
   blacklist: [],
 };
 
