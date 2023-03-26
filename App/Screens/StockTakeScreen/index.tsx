@@ -1,33 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  Alert,
-} from 'react-native';
+import moment from 'moment';
+import {View, TouchableOpacity, Text, FlatList, Alert} from 'react-native';
 import styles from './styles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {editItem, clearItem} from '../../Redux/Slices/StockTakeSlice';
 import ListItem from './ListItem';
-import ScanModal from '../../Components/ScanModal';
-import ExportModal from './ExportModal';
+import QRinputBox from '../../Components/QRinputBox';
+import ExportModal from '../../Components/ExportModal';
 import DetailsFormModal from './DetailsFormModal';
-import moment from 'moment';
+import {CreateExcel, OpenExcel, ShareExcel} from './Operation/ExportToExcel';
 
-import {CreateExcel} from './Operation/ExportToExcel';
-
-const StockScreen = (props: any) => {
+const StockTakeScreen = (props: any) => {
   const dispatch = useDispatch();
   const items = useSelector((state: any) => state.StockTake.item);
   const [loading, seloading] = useState(false);
   const [qrcode, setqrcode] = useState<string>('');
   const [exportit, setxport] = useState(false);
   const [exportURL, setexportURL] = useState<any>(null);
-  const [scan, setscan] = useState(false);
   const [DetailModal, setDetailModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
@@ -96,34 +85,12 @@ const StockScreen = (props: any) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.qrbox}>
-        <TextInput
-          value={qrcode}
-          style={styles.input}
-          placeholderTextColor={'grey'}
-          placeholder="Enter qrcode"
-          onChangeText={(val: any) => setqrcode(val)}
-          onSubmitEditing={(val: any) => addNewItem(qrcode)}
-        />
-        {qrcode ? (
-          <TouchableOpacity
-            style={styles.qrbutton}
-            onPress={() => addNewItem(qrcode)}>
-            <Ionicons name="add-circle-outline" style={styles.qrbuttonIcon} />
-            <Text style={styles.qrbuttontxt}>Add</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.qrbutton}
-            onPress={() => setscan(true)}>
-            <MaterialCommunityIcons
-              name="qrcode-scan"
-              style={styles.qrbuttonIcon}
-            />
-            <Text style={styles.qrbuttontxt}>Scan</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      <QRinputBox
+        value={qrcode}
+        onChangeText={(val: any) => setqrcode(val)}
+        onSubmitEditing={() => addNewItem(qrcode)}
+        onScanned={(val: any) => addNewItem(val)}
+      />
       {items && items.length ? (
         <FlatList
           data={items}
@@ -171,26 +138,7 @@ const StockScreen = (props: any) => {
           </TouchableOpacity>
         </View>
       ) : null}
-      {exportit ? (
-        <ExportModal
-          visible={exportit}
-          close={() => {
-            setxport(false);
-            setexportURL(null);
-          }}
-          path={exportURL}
-        />
-      ) : null}
-      {scan ? (
-        <ScanModal
-          visible={scan}
-          close={() => setscan(false)}
-          Onchange={(val: any) => {
-            setscan(false);
-            addNewItem(val);
-          }}
-        />
-      ) : null}
+
       {DetailModal ? (
         <DetailsFormModal
           visible={DetailModal}
@@ -198,8 +146,20 @@ const StockScreen = (props: any) => {
           data={currentItem}
         />
       ) : null}
+      {exportit ? (
+        <ExportModal
+          visible={exportit}
+          path={exportURL}
+          close={() => {
+            setxport(false);
+            setexportURL(null);
+          }}
+          OpenFile={() => OpenExcel(exportURL)}
+          ShareFile={() => ShareExcel(exportURL)}
+        />
+      ) : null}
     </View>
   );
 };
 
-export default StockScreen;
+export default StockTakeScreen;

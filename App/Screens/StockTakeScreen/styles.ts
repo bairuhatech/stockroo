@@ -7,42 +7,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#fff',
   },
-  qrbox: {
-    margin: 20,
-    backgroundColor: COLOR.White,
-    borderColor: COLOR.grey,
-    borderWidth: 1.5,
-    borderRadius: 5,
-    marginBottom: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  input: {
-    flex: 1,
-    marginHorizontal: 5,
-    fontFamily: Fonts.Medium,
-    fontSize: 14,
-    padding: Platform.OS === 'ios' ? 12 : 10,
-    color: '#000',
-  },
-  qrbutton: {
-    backgroundColor: COLOR.primary,
-    height: '100%',
-    paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    minWidth: 90,
-  },
-  qrbuttonIcon: {
-    color: '#fff',
-    marginRight: 10,
-    fontSize: 20,
-  },
-  qrbuttontxt: {
-    fontFamily: Fonts.SemiBold,
-    color: '#fff',
-  },
+
   ListItem: {
     flexDirection: 'row',
     alignItems: 'center',

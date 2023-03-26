@@ -9,19 +9,10 @@ import {
 } from 'react-native';
 import COLOR from '../../Config/color';
 import Fonts from '../../Config/fonts';
-import {OpenExcel, ShareExcel} from './Operation/ExportToExcel';
 import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ExportModal = (props: any) => {
-  const shareFile = async () => {
-    let shareo = await ShareExcel(props.path);
-  };
-
-  const openFile = async () => {
-    let openo = await OpenExcel(props.path);
-  };
-
   return (
     <Modal
       isVisible={props.visible}
@@ -45,12 +36,14 @@ const ExportModal = (props: any) => {
               style={styles.Image1}
             />
             <Text style={styles.pathlink}>{props.path}</Text>
-            <TouchableOpacity style={styles.button1} onPress={() => openFile()}>
+            <TouchableOpacity
+              style={styles.button1}
+              onPress={() => props.OpenFile()}>
               <Text style={styles.button1txt}>Open File</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button1}
-              onPress={() => shareFile()}>
+              onPress={() => props.ShareFile()}>
               <Text style={styles.button1txt}>Share File</Text>
             </TouchableOpacity>
           </>

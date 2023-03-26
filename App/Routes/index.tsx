@@ -8,7 +8,7 @@ import LoginScreen from '../Screens/LoginScreen';
 import Homescreen from '../Screens/Homescreen';
 
 import ScanScreen from '../Screens/ScanScreen';
-import StockScreen from '../Screens/StockScreen';
+import StockTakeScreen from '../Screens/StockTakeScreen';
 import StockCountScreen from '../Screens/StockCountScreen';
 import styles from './styles';
 import COLOR from '../Config/color';
@@ -60,11 +60,15 @@ const Routes = () => {
         component={ScanScreen}
       />
       <Stack.Screen
-        name="StockScreen"
-        component={StockScreen}
+        name="StockTakeScreen"
+        component={StockTakeScreen}
         options={HeaderOption({title: 'Stock Take', profile: false})}
       />
-      <Stack.Screen name="StockCountScreen" component={StockCountScreen} />
+      <Stack.Screen
+        name="StockCountScreen"
+        component={StockCountScreen}
+        options={HeaderOption({title: 'Stock Count', profile: false})}
+      />
     </Stack.Navigator>
   );
 };

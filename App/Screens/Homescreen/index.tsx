@@ -57,7 +57,7 @@ const Homescreen = (props: any) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionBox}
-        onPress={() => navigate('StockScreen')}>
+        onPress={() => navigate('StockTakeScreen')}>
         <View style={[styles.optionIconBox, {backgroundColor: '#E0F2F1'}]}>
           <MaterialCommunityIcons
             name="clipboard-list-outline"
