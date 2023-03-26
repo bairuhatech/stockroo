@@ -13,7 +13,7 @@ export default StyleSheet.create({
     borderColor: COLOR.grey,
     borderWidth: 1.5,
     borderRadius: 5,
-    marginBottom: 15,
+    marginBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
@@ -56,13 +56,23 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  ListItemItem2: {
+    width: 30,
+    height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   horizonalDevide: {
     backgroundColor: 'grey',
     height: '100%',
     width: 1,
   },
   ListItemItemtxt1: {},
-  ListItemItemtxt2: {},
+  ListItemItemtxt2: {
+    textAlign: 'center',
+    fontFamily: Fonts.SemiBold,
+  },
   ListItemItemtxt3: {
     flex: 1,
     textAlign: 'center',
@@ -87,5 +97,11 @@ export default StyleSheet.create({
     fontFamily: Fonts.SemiBold,
     margin: 15,
     color: '#fff',
+  },
+  SubHeading: {
+    marginBottom: 20,
+    marginTop: 0,
+    fontFamily: Fonts.SemiBold,
+    fontSize: 17,
   },
 });

@@ -59,7 +59,11 @@ const Routes = () => {
         options={HeaderOption({title: 'Scan Inventory', profile: false})}
         component={ScanScreen}
       />
-      <Stack.Screen name="StockScreen" component={StockScreen} />
+      <Stack.Screen
+        name="StockScreen"
+        component={StockScreen}
+        options={HeaderOption({title: 'Stock Take', profile: false})}
+      />
       <Stack.Screen name="StockCountScreen" component={StockCountScreen} />
     </Stack.Navigator>
   );

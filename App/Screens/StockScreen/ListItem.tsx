@@ -6,6 +6,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const ListItem = (props: any) => {
   return (
     <View style={styles.ListItem}>
+      <TouchableOpacity
+        style={styles.ListItemItem}
+        onLongPress={() => props.Details()}>
+        <Text>{props.item.Location}</Text>
+      </TouchableOpacity>
+      <View style={styles.horizonalDevide} />
       <View style={styles.ListItemItem}>
         <Text>{props.item.qrcode}</Text>
       </View>
@@ -19,12 +25,6 @@ const ListItem = (props: any) => {
           <Ionicons name="add" size={20} style={{padding: 5}} />
         </TouchableOpacity>
       </View>
-      <View style={styles.horizonalDevide} />
-      <TouchableOpacity
-        style={styles.ListItemItem2}
-        onPress={() => props.Remove(props.item)}>
-        <Ionicons name="close" color={'red'} size={20} />
-      </TouchableOpacity>
     </View>
   );
 };

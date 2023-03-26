@@ -12,16 +12,19 @@ const CreateExcel = async (data: any) => {
         let obj = {
           "Item ID's": i.qrcode,
           Quantity: i.quantity,
+          Location: i.Location,
+          Description: i.Description,
           'Date Time': i.date,
         };
         newData.push(obj);
       });
       let wb = XLSX.utils.book_new();
       let ws = XLSX.utils.json_to_sheet(newData);
-      XLSX.utils.book_append_sheet(wb, ws, 'Scan');
+      XLSX.utils.book_append_sheet(wb, ws, 'StockTake');
       const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
       var path = `${RNFS.DownloadDirectoryPath}`;
-      var File = path + `/scan-${moment().format('DD-MM-yyyy hh-mm')}.xlsx`;
+      var File =
+        path + `/Stock-Take-${moment().format('DD-MM-yyyy hh-mm')}.xlsx`;
       var storeFile = await RNFS.writeFile(File, wbout, 'ascii');
       resolve(File);
       //   const checkFolder = await RNFS.exists(path);

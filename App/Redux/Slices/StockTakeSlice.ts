@@ -11,13 +11,19 @@ function cartInitem(data: any, item: any) {
 }
 
 const addNewItem = (data: any, item: any) => {
-  const cartItem = cartInitem(data, item);
-  return cartItem === undefined
-    ? [...cartWithoutitem(data, item), {...item}]
-    : [
-        ...cartWithoutitem(data, item),
-        {...cartItem, quantity: cartItem.quantity + 1},
-      ];
+  let foundIndex = data.findIndex((x: any) => x.qrcode === item.qrcode);
+  if (foundIndex >= 0) {
+    data[foundIndex] = item;
+    return data;
+  } else {
+    const cartItem = cartInitem(data, item);
+    return cartItem === undefined
+      ? [...cartWithoutitem(data, item), {...item}]
+      : [
+          ...cartWithoutitem(data, item),
+          {...cartItem, quantity: cartItem.quantity + 1},
+        ];
+  }
 };
 
 const updateExistItem = (data: any, item: any) => {
@@ -39,8 +45,8 @@ const RemoveExistitem = (data: any, item: any) => {
   return stateTemp;
 };
 
-const ScanSlice = createSlice({
-  name: 'Scan',
+const StockTakeSlice = createSlice({
+  name: 'StockTake',
   initialState: {
     item: [],
   },
@@ -60,5 +66,6 @@ const ScanSlice = createSlice({
   },
 });
 
-export default ScanSlice;
-export const {addItem, editItem, removeItem, clearItem} = ScanSlice.actions;
+export default StockTakeSlice;
+export const {addItem, editItem, removeItem, clearItem} =
+  StockTakeSlice.actions;

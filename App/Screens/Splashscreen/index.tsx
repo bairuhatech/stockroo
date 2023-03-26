@@ -25,7 +25,7 @@ const Splashscreen = (props: any) => {
     <View style={styles.container}>
       <ImageBackground
         source={require('../../Assets/images/giphy.gif')}
-        style={{width: 100, height: 100}}
+        style={{width: 150, height: 150}}
       />
     </View>
   );

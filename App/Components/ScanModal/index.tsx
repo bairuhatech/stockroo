@@ -7,8 +7,8 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import COLOR from '../Config/color';
-import Fonts from '../Config/fonts';
+import COLOR from '../../Config/color';
+import Fonts from '../../Config/fonts';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';

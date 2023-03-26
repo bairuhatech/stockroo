@@ -1,119 +1,111 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, TextInput, TouchableOpacity, Text, FlatList} from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  Alert,
+} from 'react-native';
 import styles from './styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from 'moment';
-import {saveItem, clear} from '../../Redux/Slices/ScanSlice';
+import {
+  addItem,
+  editItem,
+  removeItem,
+  clearItem,
+} from '../../Redux/Slices/ScanSlice';
 import ListItem from './ListItem';
 import ScanModal from '../../Components/ScanModal';
-
-var RNFS = require('react-native-fs');
-import XLSX from 'xlsx';
 import ExportModal from './ExportModal';
 
-import {
-  addNewItem,
-  IncrimentItem,
-  DecrimentItem,
-  RemoveItem,
-} from './Operation/ArrayFunction';
+import {CreateExcel} from './Operation/ExportToExcel';
+import moment from 'moment';
 
 const ScanScreen = (props: any) => {
   const dispatch = useDispatch();
-  const ScanItems = useSelector((state: any) => state.Scan.items);
+  const items = useSelector((state: any) => state.Scan.item);
   const [loading, seloading] = useState(false);
   const [qrcode, setqrcode] = useState<string>('');
-  const [items, sitems] = useState([]);
 
   const [exportit, setxport] = useState(false);
   const [exportURL, setexportURL] = useState<any>(null);
   const [scan, setscan] = useState(false);
 
-  useEffect(() => {
-    if (ScanItems && ScanItems.length) {
-      sitems(ScanItems);
-    }
-  }, []);
-
-  const addItem = async (code: any) => {
+  const addNewItem = async (code: any) => {
     if (code && code) {
-      let newarr: any = await addNewItem(items, code);
-      sitems(newarr);
-      Onchange(newarr);
+      let obj: any = {
+        qrcode: code,
+        quantity: 1,
+        date: moment().format(),
+      };
+      dispatch(addItem(obj));
+      setqrcode('');
     } else {
       console.log('no qrcode', code);
     }
   };
 
   const Incriment = async (item: any) => {
-    seloading(true);
-    let newarr: any = await IncrimentItem(items, item);
-    var arr: any = items;
-    var checkItem = arr.findIndex((i: any) => i.qrcode === item.qrcode);
-    if (checkItem >= 0) {
-      let Itemo = arr[checkItem];
-      Itemo.quantity = Number(Itemo.quantity) + 1;
-      arr[checkItem] = Itemo;
-    }
-    sitems(arr);
-    Onchange(arr);
+    let value = Object.freeze(item);
+    value['quantity'] = Number(value.quantity) + 1;
+    dispatch(editItem(value));
   };
 
-  const Decriment = (item: any) => {
-    seloading(true);
-    var arr: any = items;
-    var checkItem = arr.findIndex((i: any) => i.qrcode === item.qrcode);
-    if (checkItem >= 0) {
-      let Itemo = arr[checkItem];
-      let qty = Number(Itemo.quantity) - 1;
-      if (qty >= 1) {
-        Itemo.quantity = qty;
-      } else {
-        Itemo.quantity = 1;
-      }
-      arr[checkItem] = Itemo;
-      sitems(arr);
-      Onchange(arr);
+  const Decriment = async (item: any) => {
+    let value = Object.freeze(item);
+    let qty = Number(value.quantity) - 1;
+    if (qty >= 1) {
+      value['quantity'] = qty;
+      dispatch(editItem(value));
     }
   };
 
-  const Onchange = (val: any) => {
-    dispatch(saveItem(val));
-    setTimeout(() => {
-      seloading(false);
-      setqrcode('');
-    }, 5);
+  const Remove = async (item: any) => {
+    Alert.alert('Delete Item', 'Are you sure Delete this item?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: async () => {
+          let value = Object.freeze(item);
+          dispatch(removeItem(value));
+        },
+      },
+    ]);
   };
 
-  const Export = () => {
+  const Export = async () => {
     setxport(true);
     setexportURL(null);
-    let sample_data_to_export = items;
-    let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(sample_data_to_export);
-    XLSX.utils.book_append_sheet(wb, ws, 'Scan');
-    const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
-    var path =
-      RNFS.DownloadDirectoryPath +
-      `/scan-${moment().format('DD-MM-yyyy hh-mm')}.xlsx`;
-    RNFS.writeFile(path, wbout, 'ascii')
-      .then(async (r: any) => {
-        setTimeout(() => {
-          setexportURL(path);
-        }, 2000);
-        console.log(r, 'Success', path);
-        Clear();
-      })
-      .catch((e: any) => {
-        console.log('Error', e);
-      });
+    let FilePath = await CreateExcel(items);
+    if (FilePath) {
+      setTimeout(() => {
+        seloading(false);
+        setexportURL(FilePath);
+      }, 2000);
+    }
   };
 
   const Clear = () => {
-    dispatch(clear());
-    sitems([]);
+    Alert.alert('Clear list', 'Are you sure Clear all items ?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Clear',
+        onPress: async () => {
+          dispatch(clearItem([]));
+        },
+      },
+    ]);
   };
 
   return (
@@ -125,11 +117,12 @@ const ScanScreen = (props: any) => {
           placeholderTextColor={'grey'}
           placeholder="Enter qrcode"
           onChangeText={(val: any) => setqrcode(val)}
+          onSubmitEditing={(val: any) => addNewItem(qrcode)}
         />
         {qrcode ? (
           <TouchableOpacity
             style={styles.qrbutton}
-            onPress={() => addItem(qrcode)}>
+            onPress={() => addNewItem(qrcode)}>
             <Ionicons name="add-circle-outline" style={styles.qrbuttonIcon} />
             <Text style={styles.qrbuttontxt}>Add</Text>
           </TouchableOpacity>
@@ -150,21 +143,31 @@ const ScanScreen = (props: any) => {
           data={items}
           contentContainerStyle={{flexGrow: 1, margin: 20, paddingBottom: 40}}
           ListHeaderComponent={
-            <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
-              <View style={styles.ListItemItem}>
-                <Text style={styles.ListItemItemtxt3}>Barcode</Text>
+            <>
+              <Text style={styles.SubHeading}>
+                Total items : {items.length}
+              </Text>
+              <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>Barcode</Text>
+                </View>
+                <View style={styles.horizonalDevide} />
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>Quantity</Text>
+                </View>
+                <View style={styles.horizonalDevide} />
+                <View style={styles.ListItemItem2}>
+                  <Text style={styles.ListItemItemtxt2}>-</Text>
+                </View>
               </View>
-              <View style={styles.horizonalDevide} />
-              <View style={styles.ListItemItem}>
-                <Text style={styles.ListItemItemtxt3}>Quantity</Text>
-              </View>
-            </View>
+            </>
           }
           renderItem={({item}: any) => (
             <ListItem
               item={item}
               Decriment={() => Decriment(item)}
               Incriment={() => Incriment(item)}
+              Remove={() => Remove(item)}
             />
           )}
           keyExtractor={(item: any) => item.date}
@@ -196,7 +199,7 @@ const ScanScreen = (props: any) => {
         <ScanModal
           visible={scan}
           close={() => setscan(false)}
-          Onchange={(val: any) => addItem(val)}
+          Onchange={(val: any) => addNewItem(val)}
         />
       ) : null}
     </View>
