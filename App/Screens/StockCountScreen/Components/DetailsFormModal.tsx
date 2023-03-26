@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import moment from 'moment';
 import {useDispatch} from 'react-redux';
 import COLOR from '../../../Config/color';
 import Fonts from '../../../Config/fonts';
@@ -36,7 +37,7 @@ const DetailsFormModal = (props: any) => {
         Quantity: Quantity,
         'Actual Quantity': props.data['Actual Quantity'],
         Remaining: Number(props.data['Actual Quantity']) - Number(Quantity),
-        date: date,
+        date: moment().format(),
       };
       dispatch(addItem(obj));
       props.close();
