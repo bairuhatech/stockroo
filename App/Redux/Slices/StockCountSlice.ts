@@ -1,17 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 function cartWithoutitem(data: any, item: any) {
-  let Itemo = data.filter((x: any) => x.qrcode !== item.qrcode);
+  let Itemo = data.filter((x: any) => x.Barcode !== item.Barcode);
   return Itemo;
 }
 
 function cartInitem(data: any, item: any) {
-  let Itemos = data.filter((x: any) => x.qrcode === item.qrcode)[0];
+  let Itemos = data.filter((x: any) => x.Barcode === item.Barcode)[0];
   return Itemos;
 }
 
 const addNewItem = (data: any, item: any) => {
-  let foundIndex = data.findIndex((x: any) => x.qrcode === item.qrcode);
+  let foundIndex = data.findIndex((x: any) => x.Barcode === item.Barcode);
   if (foundIndex >= 0) {
     data[foundIndex] = item;
     return data;
@@ -27,7 +27,7 @@ const addNewItem = (data: any, item: any) => {
 };
 
 const updateExistItem = (data: any, item: any) => {
-  let foundIndex = data.findIndex((x: any) => x.qrcode === item.qrcode);
+  let foundIndex = data.findIndex((x: any) => x.Barcode === item.Barcode);
   let todos = data;
   todos[foundIndex] = {
     ...todos[foundIndex],
@@ -37,7 +37,7 @@ const updateExistItem = (data: any, item: any) => {
 };
 
 const RemoveExistitem = (data: any, item: any) => {
-  let foundIndex = data.findIndex((x: any) => x.qrcode === item.qrcode);
+  let foundIndex = data.findIndex((x: any) => x.Barcode === item.Barcode);
   const stateTemp = [
     ...data.slice(0, foundIndex),
     ...data.slice(foundIndex + 1),
@@ -55,7 +55,7 @@ const StockCountSlice = createSlice({
     storeData: (state: any, action: any) => {
       state.data = action.payload;
     },
-    clearData: (state: any, action: any) => {
+    clearData: (state: any) => {
       state.data = [];
     },
     addItem: (state: any, action: any) => {
