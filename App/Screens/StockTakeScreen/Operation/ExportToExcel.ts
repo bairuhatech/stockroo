@@ -3,6 +3,7 @@ var RNFS = require('react-native-fs');
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob';
+import {Platform} from 'react-native';
 
 const CreateExcel = async (data: any) => {
   return new Promise(async (resolve, reject) => {
@@ -22,7 +23,10 @@ const CreateExcel = async (data: any) => {
       let ws = XLSX.utils.json_to_sheet(newData);
       XLSX.utils.book_append_sheet(wb, ws, 'StockTake');
       const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
-      var path = `${RNFS.DownloadDirectoryPath}`;
+      var path =
+        Platform.OS === 'android'
+          ? `${RNFS.DownloadDirectoryPath}`
+          : `${RNFS.DocumentDirectoryPath}`;
       var File =
         path + `/Stock-Take-${moment().format('DD-MM-yyyy hh-mm')}.xlsx`;
       var storeFile = await RNFS.writeFile(File, wbout, 'ascii');
@@ -64,15 +68,19 @@ const ShareExcel = async (path: any) => {
 const OpenExcel = async (path: any) => {
   return new Promise(async (resolve, reject) => {
     try {
-      RNFetchBlob.android
-        .actionViewIntent(path, 'application/vnd.ms-excel')
-        .then(() => {
-          console.log('success');
-          resolve(true);
-        })
-        .catch(err => {
-          resolve(false);
-        });
+      if (Platform.OS === 'android') {
+        RNFetchBlob.android
+          .actionViewIntent(path, 'application/vnd.ms-excel')
+          .then(() => {
+            console.log('success');
+            resolve(true);
+          })
+          .catch(err => {
+            resolve(false);
+          });
+      } else {
+        RNFetchBlob.ios.previewDocument(path);
+      }
     } catch (err) {
       resolve(false);
     }

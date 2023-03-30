@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 import COLOR from '../../Config/color';
 import Fonts from '../../Config/fonts';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import {CameraScreen} from 'react-native-camera-kit';
+
 const ScanModal = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [flashOn, setFlashOn] = useState(false);
@@ -20,7 +22,7 @@ const ScanModal = (props: any) => {
   const onSuccess = (da: any) => {
     if (continus) {
       setLoading(true);
-      props.Onchange(da.data);
+      props.Onchange(da.codeStringValue);
       setTimeout(() => {
         setLoading(false);
       }, 5);
@@ -36,7 +38,7 @@ const ScanModal = (props: any) => {
       transparent={true}
       visible={props.visible}
       onRequestClose={() => props.close()}>
-      <View style={styles.centeredView}>
+      <SafeAreaView style={styles.centeredView}>
         <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
         <View style={styles.ModalHeader}>
           <Text style={styles.ModalHeadertxt}>Scan Item</Text>
@@ -56,13 +58,24 @@ const ScanModal = (props: any) => {
           </View>
         </View>
         {loading ? null : (
-          <QRCodeScanner
-            onRead={onSuccess}
-            fadeIn={false}
-            reactivate={true}
-            reactivateTimeout={2000}
-            flashMode={flashOn ? RNCamera.Constants.FlashMode.torch : null}
-            showMarker={true}
+          <CameraScreen
+            scanBarcode={true}
+            onReadCode={event => onSuccess(event.nativeEvent)}
+            showFrame={true}
+            laserColor="red"
+            frameColor="white"
+            cameraRatioOverlay={undefined}
+            captureButtonImage={undefined}
+            captureButtonImageStyle={{}}
+            cameraFlipImage={undefined}
+            cameraFlipImageStyle={{}}
+            hideControls={undefined}
+            torchOnImage={undefined}
+            torchOffImage={undefined}
+            torchImageStyle={{}}
+            onBottomButtonPressed={function (event: any): void {
+              console.log('onBottomButtonPressed', event);
+            }}
           />
         )}
         <TouchableOpacity
@@ -75,7 +88,7 @@ const ScanModal = (props: any) => {
           />
           <Text style={{color: '#fff', marginLeft: 10}}>Continues Scan</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

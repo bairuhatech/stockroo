@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {
   RequestfileWritepremission,
   RequestfileReadpremission,
+  RequestCamerapremission,
 } from '../../Config/Permissons';
 
 const Homescreen = (props: any) => {
@@ -22,8 +23,10 @@ const Homescreen = (props: any) => {
   const CheckPermisson = async () => {
     let checkRead = await RequestfileReadpremission();
     let checkWrite = await RequestfileWritepremission();
+    let cameraOpen = await RequestCamerapremission();
     console.log('checkRead', checkRead);
     console.log('checkWrite', checkWrite);
+    console.log('cameraOpen', cameraOpen);
   };
 
   const navigate = (route: any) => {

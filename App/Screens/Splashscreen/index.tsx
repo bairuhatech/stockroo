@@ -1,24 +1,26 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {View, StatusBar, Image, ImageBackground, Text} from 'react-native';
+import {View, StatusBar, ImageBackground, Platform} from 'react-native';
 import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 const Splashscreen = (props: any) => {
-  const navigation = useNavigation();
   const Auth = useSelector((state: any) => state.Auth);
   useEffect(() => {
-    StatusBar.setTranslucent(true);
+    if (Platform.OS === 'android') {
+      StatusBar.setTranslucent(true);
+    }
     checkAuth();
   }, [1]);
 
   const checkAuth = () => {
     setTimeout(() => {
-      navigation.reset(
-        Auth.auth
-          ? {routes: [{name: 'Homescreen'}]}
-          : {routes: [{name: 'LoginScreen'}]},
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [Auth.auth ? {name: 'Homescreen'} : {name: 'LoginScreen'}],
+        }),
       );
-    }, 1500);
+    }, 1000);
   };
 
   return (
