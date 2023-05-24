@@ -1,21 +1,24 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native';
 
 import Splashscreen from '../Screens/Splashscreen';
 import LoginScreen from '../Screens/LoginScreen';
 import Homescreen from '../Screens/Homescreen';
+import SettingScreen from '../Screens/SettingScreen';
 
 import ScanScreen from '../Screens/ScanScreen';
 import StockTakeScreen from '../Screens/StockTakeScreen';
 import StockCountScreen from '../Screens/StockCountScreen';
+
 import styles from './styles';
 import COLOR from '../Config/color';
 
 const Routes = () => {
   const Stack = createNativeStackNavigator();
-
+  const navigation = useNavigation();
   const HeaderOption = (props: any) => {
     return {
       title: props.title,
@@ -23,13 +26,10 @@ const Routes = () => {
       headerTintColor: COLOR.black,
       headerTitleStyle: styles.headerTitleStyleNew,
       headerRight: () =>
-        props.profile ? (
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="account-circle-outline"
-              size={30}
-              color={'grey'}
-            />
+        props.settings ? (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SettingScreen')}>
+            <Ionicons name="settings-outline" size={25} color={'#000'} />
           </TouchableOpacity>
         ) : null,
     };
@@ -50,24 +50,29 @@ const Routes = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="SettingScreen"
+        component={SettingScreen}
+        options={HeaderOption({title: 'Settings', settings: false})}
+      />
+      <Stack.Screen
         name="Homescreen"
-        options={HeaderOption({title: 'Dashboard', profile: true})}
+        options={HeaderOption({title: 'Dashboard', settings: true})}
         component={Homescreen}
       />
       <Stack.Screen
         name="ScanScreen"
-        options={HeaderOption({title: 'Scan Inventory', profile: false})}
+        options={HeaderOption({title: 'Scan Inventory', settings: true})}
         component={ScanScreen}
       />
       <Stack.Screen
         name="StockTakeScreen"
         component={StockTakeScreen}
-        options={HeaderOption({title: 'Stock Take', profile: false})}
+        options={HeaderOption({title: 'Stock Take', settings: true})}
       />
       <Stack.Screen
         name="StockCountScreen"
         component={StockCountScreen}
-        options={HeaderOption({title: 'Stock Count', profile: false})}
+        options={HeaderOption({title: 'Stock Count', settings: true})}
       />
     </Stack.Navigator>
   );

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -12,9 +13,21 @@ import Fonts from '../../Config/fonts';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ScanModal from '../ScanModal';
+import {continue_scan} from '../../Redux/Slices/SettingSlice';
 
 export default function QRinputBox(props: any) {
+  const dispatch = useDispatch();
+  const settings = useSelector((state: any) => state.Settings);
   const [scan, setscan] = useState(false);
+
+  const continueScaned = (val: any) => {
+    props.onChangeText(val);
+    let length = val.length;
+    if (length > 3 && settings.continues_scan) {
+      props.continueScan(val);
+    }
+  };
+
   return (
     <>
       <View style={styles.qrbox}>
@@ -23,9 +36,10 @@ export default function QRinputBox(props: any) {
           style={styles.input}
           placeholderTextColor={'grey'}
           placeholder="Enter qrcode"
-          onChangeText={(val: any) => props.onChangeText(val)}
+          onChangeText={(val: any) => continueScaned(val)}
           onSubmitEditing={(val: any) => props.onSubmitEditing()}
         />
+
         {props.value ? (
           <TouchableOpacity
             style={styles.qrbutton}
@@ -45,6 +59,16 @@ export default function QRinputBox(props: any) {
           </TouchableOpacity>
         )}
       </View>
+      <TouchableOpacity
+        style={styles.switchBox}
+        onPress={() => dispatch(continue_scan(!settings.continues_scan))}>
+        <Ionicons
+          size={24}
+          color={settings.continues_scan ? '#4CAF50' : '#B0BEC5'}
+          name={settings.continues_scan ? 'checkbox' : 'square-outline'}
+        />
+        <Text style={styles.switchBoxtxt}>Use peripheral device</Text>
+      </TouchableOpacity>
       {scan ? (
         <ScanModal
           visible={scan}
@@ -94,5 +118,18 @@ const styles = StyleSheet.create({
   qrbuttontxt: {
     fontFamily: Fonts.SemiBold,
     color: '#fff',
+  },
+  switchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    paddingVertical: 10,
+    paddingBottom: 0,
+  },
+  switchBoxtxt: {
+    fontFamily: Fonts.SemiBold,
+    color: '#000',
+    fontSize: 12,
+    marginLeft: 10,
   },
 });

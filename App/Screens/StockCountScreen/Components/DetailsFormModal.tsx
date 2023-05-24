@@ -40,6 +40,7 @@ const DetailsFormModal = (props: any) => {
         date: moment().format(),
       };
       dispatch(addItem(obj));
+      props.clearQrcode();
       props.close();
     } else {
     }

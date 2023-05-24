@@ -36,7 +36,7 @@ const Homescreen = (props: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.txt1}>Welcome StockRoo,</Text>
-      <Text style={styles.txt2}>Mr/Ms. {Auth.username},</Text>
+      <Text style={styles.txt2}>{Auth.username},</Text>
       <View style={{margin: 20}} />
       <TouchableOpacity
         style={styles.optionBox}

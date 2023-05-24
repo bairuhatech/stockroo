@@ -34,6 +34,7 @@ const DetailsFormModal = (props: any) => {
         date: date,
       };
       dispatch(addItem(obj));
+      props.clearQrcode();
       props.close();
     } else {
     }

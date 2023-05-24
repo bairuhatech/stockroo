@@ -104,6 +104,7 @@ const ScanScreen = (props: any) => {
         onChangeText={(val: any) => setqrcode(val)}
         onSubmitEditing={() => addNewItem(qrcode)}
         onScanned={(val: any) => addNewItem(val)}
+        continueScan={(val: any) => addNewItem(val)}
       />
       {items && items.length ? (
         <FlatList
