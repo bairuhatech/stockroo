@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingVertical: 10,
     paddingBottom: 0,
+    paddingTop: 20,
   },
   switchBoxtxt: {
     fontFamily: Fonts.SemiBold,

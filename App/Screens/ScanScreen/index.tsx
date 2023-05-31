@@ -8,11 +8,12 @@ import {
   removeItem,
   clearItem,
 } from '../../Redux/Slices/ScanSlice';
-import ListItem from './ListItem';
+import ListItem from './components/ListItem';
 import {CreateExcel, OpenExcel, ShareExcel} from './Operation/ExportToExcel';
 import moment from 'moment';
 import QRinputBox from '../../Components/QRinputBox';
 import ExportModal from '../../Components/ExportModal';
+import MoreDetails from './components/MoreDetails';
 
 const ScanScreen = (props: any) => {
   const dispatch = useDispatch();
@@ -109,12 +110,15 @@ const ScanScreen = (props: any) => {
       {items && items.length ? (
         <FlatList
           data={items}
-          contentContainerStyle={{flexGrow: 1, margin: 20, paddingBottom: 40}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            margin: 20,
+            paddingBottom: 40,
+            marginTop: 0,
+          }}
           ListHeaderComponent={
             <>
-              <Text style={styles.SubHeading}>
-                Total items : {items.length}
-              </Text>
+              <MoreDetails />
               <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
                 <View style={styles.ListItemItem}>
                   <Text style={styles.ListItemItemtxt3}>Barcode</Text>

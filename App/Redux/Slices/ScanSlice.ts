@@ -42,9 +42,13 @@ const RemoveExistitem = (data: any, item: any) => {
 const ScanSlice = createSlice({
   name: 'Scan',
   initialState: {
+    customer_name: '',
     item: [],
   },
   reducers: {
+    saveCustomername: (state: any, action: any) => {
+      state.customer_name = action.payload;
+    },
     addItem: (state: any, action: any) => {
       state.item = addNewItem(state.item, action.payload);
     },
@@ -56,9 +60,11 @@ const ScanSlice = createSlice({
     },
     clearItem: (state, action) => {
       state.item = [];
+      state.customer_name = '';
     },
   },
 });
 
 export default ScanSlice;
-export const {addItem, editItem, removeItem, clearItem} = ScanSlice.actions;
+export const {saveCustomername, addItem, editItem, removeItem, clearItem} =
+  ScanSlice.actions;
