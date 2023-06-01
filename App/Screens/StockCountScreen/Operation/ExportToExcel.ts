@@ -26,7 +26,7 @@ const ReadExcel = async () => {
   });
 };
 
-const CreateExcel = async (data: any) => {
+const CreateExcel = async (data: any, length: any, qty: any, customer: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       var newData: any = [];
@@ -47,7 +47,16 @@ const CreateExcel = async (data: any) => {
         newData.push(obj);
       });
       let wb = XLSX.utils.book_new();
-      let ws = XLSX.utils.json_to_sheet(newData);
+      let ws = XLSX.utils.json_to_sheet(newData, {origin: 'A5'});
+      XLSX.utils.sheet_add_aoa(
+        ws,
+        [
+          ['Total Items', length],
+          ['Total QTY', qty],
+          ['Customer Name', customer],
+        ],
+        {origin: 'A1'},
+      );
       XLSX.utils.book_append_sheet(wb, ws, 'StockCount');
       const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
       var path =

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {View, Text, TouchableOpacity, FlatList, Alert} from 'react-native';
@@ -19,6 +19,7 @@ import {
   clearData,
   editItem,
   clearItem,
+  setTotalQty,
 } from '../../Redux/Slices/StockCountSlice';
 import ListHeader from './Components/ListHeader';
 import ListItem from './Components/ListItem';
@@ -28,6 +29,10 @@ const StockCountScreen = (props: any) => {
   const navigation = useNavigation<any>();
   const data = useSelector((state: any) => state.StockCount.data);
   const items = useSelector((state: any) => state.StockCount.item);
+  const total_qty = useSelector((state: any) => state.StockCount.total_qty);
+  const customer_name = useSelector(
+    (state: any) => state.StockCount.customer_name,
+  );
   const [qrcode, setqrcode] = useState<string>('');
   const [exportit, setxport] = useState(false);
   const [exportURL, setexportURL] = useState<any>(null);
@@ -46,6 +51,10 @@ const StockCountScreen = (props: any) => {
         </TouchableOpacity>
       ),
   });
+
+  useEffect(() => {
+    CalcTotalQty();
+  }, [items]);
 
   const FilePicker = async () => {
     let Filedata: any = await ReadExcel();
@@ -96,11 +105,25 @@ const StockCountScreen = (props: any) => {
   const Export = async () => {
     setxport(true);
     setexportURL(null);
-    let FilePath = await CreateExcel(items);
+    let length = items.length;
+    let qty = total_qty;
+    let customer = customer_name;
+    let FilePath = await CreateExcel(items, length, qty, customer);
     if (FilePath) {
       setTimeout(() => {
         setexportURL(FilePath);
       }, 2000);
+    }
+  };
+
+  const CalcTotalQty = () => {
+    if (items && items.length) {
+      var Tqty: any = 0;
+      items.map((itemo: any) => {
+        console.log(itemo);
+        return (Tqty = Tqty + Number(itemo.Quantity));
+      });
+      dispatch(setTotalQty(Tqty));
     }
   };
 
@@ -140,7 +163,9 @@ const StockCountScreen = (props: any) => {
                 margin: 20,
                 paddingBottom: 40,
               }}
-              ListHeaderComponent={<ListHeader items={items} />}
+              ListHeaderComponent={
+                <ListHeader items={items} total_qty={total_qty} />
+              }
               renderItem={({item}: any) => (
                 <ListItem
                   item={item}

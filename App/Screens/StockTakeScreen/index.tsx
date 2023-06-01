@@ -121,7 +121,12 @@ const StockTakeScreen = (props: any) => {
       {items && items.length ? (
         <FlatList
           data={items}
-          contentContainerStyle={{flexGrow: 1, margin: 20, paddingBottom: 40}}
+          contentContainerStyle={{
+            flexGrow: 1,
+            margin: 20,
+            paddingBottom: 40,
+            marginTop: 0,
+          }}
           ListHeaderComponent={
             <>
               <MoreDetails />
@@ -137,7 +142,6 @@ const StockTakeScreen = (props: any) => {
                     Total Qty : {total_qty}
                   </Text>
                 </View>
-                <View style={styles.ListItemItem2}></View>
               </View>
               <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
                 <View style={styles.ListItemItem}>

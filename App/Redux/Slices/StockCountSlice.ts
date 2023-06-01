@@ -77,6 +77,8 @@ const StockCountSlice = createSlice({
     },
     clearItem: (state, action) => {
       state.item = [];
+      state.customer_name = '';
+      state.total_qty = 0;
     },
   },
 });

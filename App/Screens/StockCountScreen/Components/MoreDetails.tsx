@@ -4,12 +4,14 @@ import styles from '../styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {saveCustomername} from '../../../Redux/Slices/ScanSlice';
+import {saveCustomername} from '../../../Redux/Slices/StockCountSlice';
 
 const MoreDetails = (props: any) => {
   const timerRef: any = useRef(null);
   const dispatch = useDispatch();
-  const Customer_name = useSelector((state: any) => state.Scan.customer_name);
+  const Customer_name = useSelector(
+    (state: any) => state.StockCount.customer_name,
+  );
   const [show, setShow] = useState(false);
   const [customerName, setcustomer_name] = useState(Customer_name);
 
