@@ -5,7 +5,7 @@ import Share from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Platform} from 'react-native';
 
-const CreateExcel = async (data: any) => {
+const CreateExcel = async (data: any, length: any, qty: any, customer: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       var newData: any = [];
@@ -20,7 +20,16 @@ const CreateExcel = async (data: any) => {
         newData.push(obj);
       });
       let wb = XLSX.utils.book_new();
-      let ws = XLSX.utils.json_to_sheet(newData);
+      let ws = XLSX.utils.json_to_sheet(newData, {origin: 'A5'});
+      XLSX.utils.sheet_add_aoa(
+        ws,
+        [
+          ['Total Items', length],
+          ['Total QTY', qty],
+          ['Customer Name', customer],
+        ],
+        {origin: 'A1'},
+      );
       XLSX.utils.book_append_sheet(wb, ws, 'StockTake');
       const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
       var path =
@@ -31,18 +40,6 @@ const CreateExcel = async (data: any) => {
         path + `/Stock-Take-${moment().format('DD-MM-yyyy hh-mm')}.xlsx`;
       var storeFile = await RNFS.writeFile(File, wbout, 'ascii');
       resolve(File);
-      //   const checkFolder = await RNFS.exists(path);
-      //   if (!checkFolder) {
-      //     let createFolder = await RNFS.mkdir(path);
-      //     console.log('createFolder', createFolder);
-      //     if (createFolder) {
-      //       var storeFile = await RNFS.writeFile(File, wbout, 'ascii');
-      //       console.log('storeFile', storeFile);
-      //       resolve(File);
-      //     }
-      //   } else {
-
-      //   }
     } catch (err) {
       reject(err);
     }

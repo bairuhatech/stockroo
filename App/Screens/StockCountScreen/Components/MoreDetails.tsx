@@ -20,6 +20,9 @@ const MoreDetails = (props: any) => {
       dispatch(saveCustomername(value));
     }, 200);
   };
+
+  console.log(Customer_name);
+
   return (
     <View style={styles.MoreDetails}>
       <TouchableOpacity

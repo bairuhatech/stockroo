@@ -103,7 +103,7 @@ export default StyleSheet.create({
     marginBottom: 20,
     marginTop: 0,
     fontFamily: Fonts.SemiBold,
-    fontSize: 17,
+    fontSize: 14,
   },
   MoreDetails: {
     borderTopColor: COLOR.grey,
@@ -140,6 +140,6 @@ export default StyleSheet.create({
     fontSize: 11,
     marginHorizontal: 14,
     marginTop: 10,
-    color: COLOR.gre2,
+    color: COLOR.grey1,
   },
 });

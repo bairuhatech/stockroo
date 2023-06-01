@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import Fonts from '../../Config/fonts';
 import COLOR from '../../Config/color';
 export default StyleSheet.create({
@@ -84,5 +84,50 @@ export default StyleSheet.create({
   headerxt: {
     fontFamily: Fonts.SemiBold,
     color: 'red',
+  },
+  MoreDetails: {
+    borderTopColor: COLOR.grey,
+    borderTopWidth: 0.6,
+    paddingTop: 14,
+    borderRadius: 5,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  moreHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  moreHeadertxt: {
+    fontFamily: Fonts.SemiBold,
+    fontSize: 14,
+    color: '#000',
+  },
+  moreHeaderIcon: {
+    fontSize: 20,
+    color: '#000',
+  },
+  inputBox: {
+    backgroundColor: COLOR.White,
+    borderColor: COLOR.grey,
+    borderWidth: 1.5,
+    borderRadius: 5,
+    marginBottom: 0,
+    marginTop: 20,
+  },
+  inputBoxtxt: {
+    fontFamily: Fonts.Medium,
+    fontSize: 11,
+    marginHorizontal: 14,
+    marginTop: 10,
+    color: COLOR.grey1,
+  },
+  input: {
+    flex: 1,
+    marginHorizontal: 5,
+    fontFamily: Fonts.Medium,
+    fontSize: 14,
+    padding: Platform.OS === 'ios' ? 12 : 10,
+    color: '#000',
   },
 });

@@ -48,10 +48,18 @@ const RemoveExistitem = (data: any, item: any) => {
 const StockCountSlice = createSlice({
   name: 'StockCount',
   initialState: {
+    customer_name: '',
+    total_qty: 0,
     data: [],
     item: [],
   },
   reducers: {
+    saveCustomername: (state: any, action: any) => {
+      state.customer_name = action.payload;
+    },
+    setTotalQty: (state: any, action: any) => {
+      state.total_qty = action.payload;
+    },
     storeData: (state: any, action: any) => {
       state.data = action.payload;
     },
@@ -74,5 +82,13 @@ const StockCountSlice = createSlice({
 });
 
 export default StockCountSlice;
-export const {storeData, clearData, addItem, editItem, removeItem, clearItem} =
-  StockCountSlice.actions;
+export const {
+  saveCustomername,
+  setTotalQty,
+  storeData,
+  clearData,
+  addItem,
+  editItem,
+  removeItem,
+  clearItem,
+} = StockCountSlice.actions;

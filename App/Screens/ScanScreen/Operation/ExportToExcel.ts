@@ -5,7 +5,7 @@ import Share from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Platform} from 'react-native';
 
-const CreateExcel = async (data: any) => {
+const CreateExcel = async (data: any, length: any, qty: any, customer: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       var newData: any = [];
@@ -18,9 +18,22 @@ const CreateExcel = async (data: any) => {
         newData.push(obj);
       });
       let wb = XLSX.utils.book_new();
-      let ws = XLSX.utils.json_to_sheet(newData);
-      XLSX.utils.book_append_sheet(wb, ws, 'Scan');
-      const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
+      let ws = XLSX.utils.json_to_sheet(newData, {origin: 'A5'});
+      XLSX.utils.sheet_add_aoa(
+        ws,
+        [
+          ['Total Items', length],
+          ['Total QTY', qty],
+          ['Customer Name', customer],
+        ],
+        {origin: 'A1'},
+      );
+      XLSX.utils.book_append_sheet(wb, ws, 'Scan', true);
+      const wbout = XLSX.write(wb, {
+        type: 'binary',
+        bookType: 'xlsx',
+        cellStyles: true,
+      });
       var path =
         Platform.OS === 'android'
           ? `${RNFS.DownloadDirectoryPath}`

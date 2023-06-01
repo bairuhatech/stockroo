@@ -1,24 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
 import {View, TouchableOpacity, Text, FlatList, Alert} from 'react-native';
 import styles from './styles';
-import {editItem, clearItem} from '../../Redux/Slices/StockTakeSlice';
-import ListItem from './ListItem';
+import {
+  editItem,
+  clearItem,
+  setTotalQty,
+} from '../../Redux/Slices/StockTakeSlice';
+import ListItem from './components/ListItem';
 import QRinputBox from '../../Components/QRinputBox';
 import ExportModal from '../../Components/ExportModal';
-import DetailsFormModal from './DetailsFormModal';
+import DetailsFormModal from './components/DetailsFormModal';
 import {CreateExcel, OpenExcel, ShareExcel} from './Operation/ExportToExcel';
+import MoreDetails from './components/MoreDetails';
 
 const StockTakeScreen = (props: any) => {
   const dispatch = useDispatch();
   const items = useSelector((state: any) => state.StockTake.item);
+  const total_qty = useSelector((state: any) => state.StockTake.total_qty);
+  const customer_name = useSelector(
+    (state: any) => state.StockTake.customer_name,
+  );
   const [loading, seloading] = useState(false);
   const [qrcode, setqrcode] = useState<string>('');
   const [exportit, setxport] = useState(false);
   const [exportURL, setexportURL] = useState<any>(null);
   const [DetailModal, setDetailModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
+
+  useEffect(() => {
+    CalcTotalQty();
+  }, [items]);
 
   const addNewItem = async (code: any) => {
     if (code && code) {
@@ -55,10 +68,23 @@ const StockTakeScreen = (props: any) => {
     }
   };
 
+  const CalcTotalQty = () => {
+    if (items && items.length) {
+      var Tqty: any = 0;
+      items.map((itemo: any) => {
+        return (Tqty = Tqty + Number(itemo.quantity));
+      });
+      dispatch(setTotalQty(Tqty));
+    }
+  };
+
   const Export = async () => {
     setxport(true);
     setexportURL(null);
-    let FilePath = await CreateExcel(items);
+    let length = items.length;
+    let qty = total_qty;
+    let customer = customer_name;
+    let FilePath = await CreateExcel(items, length, qty, customer);
     if (FilePath) {
       setTimeout(() => {
         seloading(false);
@@ -98,9 +124,21 @@ const StockTakeScreen = (props: any) => {
           contentContainerStyle={{flexGrow: 1, margin: 20, paddingBottom: 40}}
           ListHeaderComponent={
             <>
-              <Text style={styles.SubHeading}>
-                Total items : {items.length}
-              </Text>
+              <MoreDetails />
+              <View style={styles.ListItem}>
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>
+                    Total Items : {items.length}
+                  </Text>
+                </View>
+                <View style={styles.horizonalDevide} />
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>
+                    Total Qty : {total_qty}
+                  </Text>
+                </View>
+                <View style={styles.ListItemItem2}></View>
+              </View>
               <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
                 <View style={styles.ListItemItem}>
                   <Text style={styles.ListItemItemtxt3}>Location</Text>

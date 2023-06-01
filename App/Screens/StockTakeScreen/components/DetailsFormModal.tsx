@@ -8,13 +8,13 @@ import {
   ScrollView,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import COLOR from '../../Config/color';
-import Fonts from '../../Config/fonts';
+import COLOR from '../../../Config/color';
+import Fonts from '../../../Config/fonts';
 import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import InputBox from '../../Components/InputBox';
+import InputBox from '../../../Components/InputBox';
 
-import {addItem} from '../../Redux/Slices/StockTakeSlice';
+import {addItem} from '../../../Redux/Slices/StockTakeSlice';
 
 const DetailsFormModal = (props: any) => {
   const dispatch = useDispatch();

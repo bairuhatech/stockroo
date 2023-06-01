@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, TouchableOpacity, Text, FlatList, Alert} from 'react-native';
 import styles from './styles';
@@ -7,6 +7,7 @@ import {
   editItem,
   removeItem,
   clearItem,
+  setTotalQty,
 } from '../../Redux/Slices/ScanSlice';
 import ListItem from './components/ListItem';
 import {CreateExcel, OpenExcel, ShareExcel} from './Operation/ExportToExcel';
@@ -18,11 +19,17 @@ import MoreDetails from './components/MoreDetails';
 const ScanScreen = (props: any) => {
   const dispatch = useDispatch();
   const items = useSelector((state: any) => state.Scan.item);
+  const total_qty = useSelector((state: any) => state.Scan.total_qty);
+  const customer_name = useSelector((state: any) => state.Scan.customer_name);
   const [loading, seloading] = useState(false);
   const [qrcode, setqrcode] = useState<string>('');
 
   const [exportit, setxport] = useState(false);
   const [exportURL, setexportURL] = useState<any>(null);
+
+  useEffect(() => {
+    CalcTotalQty();
+  }, [items]);
 
   const addNewItem = async (code: any) => {
     if (code && code) {
@@ -53,6 +60,16 @@ const ScanScreen = (props: any) => {
     }
   };
 
+  const CalcTotalQty = () => {
+    if (items && items.length) {
+      var Tqty: any = 0;
+      items.map((itemo: any) => {
+        return (Tqty = Tqty + Number(itemo.quantity));
+      });
+      dispatch(setTotalQty(Tqty));
+    }
+  };
+
   const Remove = async (item: any) => {
     Alert.alert('Delete Item', 'Are you sure Delete this item?', [
       {
@@ -73,7 +90,10 @@ const ScanScreen = (props: any) => {
   const Export = async () => {
     setxport(true);
     setexportURL(null);
-    let FilePath = await CreateExcel(items);
+    let length = items.length;
+    let qty = total_qty;
+    let customer = customer_name;
+    let FilePath = await CreateExcel(items, length, qty, customer);
     if (FilePath) {
       setTimeout(() => {
         seloading(false);
@@ -119,6 +139,20 @@ const ScanScreen = (props: any) => {
           ListHeaderComponent={
             <>
               <MoreDetails />
+              <View style={styles.ListItem}>
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>
+                    Total Items : {items.length}
+                  </Text>
+                </View>
+                <View style={styles.horizonalDevide} />
+                <View style={styles.ListItemItem}>
+                  <Text style={styles.ListItemItemtxt3}>
+                    Total Qty : {total_qty}
+                  </Text>
+                </View>
+                <View style={styles.ListItemItem2}></View>
+              </View>
               <View style={[styles.ListItem, {backgroundColor: '#E8EAF6'}]}>
                 <View style={styles.ListItemItem}>
                   <Text style={styles.ListItemItemtxt3}>Barcode</Text>

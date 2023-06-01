@@ -43,11 +43,15 @@ const ScanSlice = createSlice({
   name: 'Scan',
   initialState: {
     customer_name: '',
+    total_qty: 0,
     item: [],
   },
   reducers: {
     saveCustomername: (state: any, action: any) => {
       state.customer_name = action.payload;
+    },
+    setTotalQty: (state: any, action: any) => {
+      state.total_qty = action.payload;
     },
     addItem: (state: any, action: any) => {
       state.item = addNewItem(state.item, action.payload);
@@ -61,10 +65,17 @@ const ScanSlice = createSlice({
     clearItem: (state, action) => {
       state.item = [];
       state.customer_name = '';
+      state.total_qty = 0;
     },
   },
 });
 
 export default ScanSlice;
-export const {saveCustomername, addItem, editItem, removeItem, clearItem} =
-  ScanSlice.actions;
+export const {
+  saveCustomername,
+  setTotalQty,
+  addItem,
+  editItem,
+  removeItem,
+  clearItem,
+} = ScanSlice.actions;
